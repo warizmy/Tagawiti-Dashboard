@@ -1,0 +1,102 @@
+@import url("https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap");
+@import "responsive.css";
+@import "pop-up-box.css";
+@import "budget.css";
+@import "dashboard-home.css";
+@import "profile.css";
+@import "sidebar.css";
+@import "table.css";
+@import "login.css";
+@import "password-change.css";
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Poppins", sans-serif;
+}
+
+body {
+  background-color: #ecf0f5;
+  display: flex;
+  height: 100vh;
+}
+
+.dashboard-container {
+  display: flex;
+  width: 100%;
+}
+
+.main-content-wrapper {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+}
+
+.main-content {
+  flex: 1;
+  padding: 10px 20px;
+  overflow-y: auto;
+}
+
+.main-content header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.main-content h1 {
+  font-size: 2em;
+  color: #2c3e50;
+  font-weight: 600;
+}
+
+.loading-circle-container {
+  display: none;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: #fff;
+  justify-content: center;
+  align-items: center;
+  z-index: 99999;
+}
+
+.loading-circle {
+  width: 50px;
+  height: 50px;
+  border: 10px solid #2c3e50;
+  border-radius: 50%;
+  border-top: 10px solid #fff;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+.alert-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  z-index: 9990;
+}
+
+.alert-inner-container {
+  position: fixed;
+  z-index: 9999;
+  transform: translate(-50%, -50%);
+  top: 50%;
+  left: 50%;
+}

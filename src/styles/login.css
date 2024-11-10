@@ -1,0 +1,57 @@
+.login-container {
+  width: 100%;
+  min-height: 100vh;
+}
+
+.login-content-container {
+  width: 100%;
+  min-height: 100vh;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+}
+
+.login-content-container h1 {
+  color: #f4f6ff;
+  font-weight: 700;
+  font-size: 3rem;
+  text-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+}
+
+.login-content-container h1 span {
+  font-weight: 300;
+}
+
+.box-container {
+  background-color: #f4f6ff;
+  border-radius: 10px;
+  box-shadow: rgba(0, 0, 0, 0.25) 0px 54px 55px,
+    rgba(0, 0, 0, 0.12) 0px -12px 30px, rgba(0, 0, 0, 0.12) 0px 4px 6px,
+    rgba(0, 0, 0, 0.17) 0px 12px 13px, rgba(0, 0, 0, 0.09) 0px -3px 5px;
+  padding: 3rem 3rem 4rem 3rem;
+}
+
+.box-container h4 span {
+  color: #3379be;
+  font-weight: 600;
+}
+
+.box-container .input-group-text {
+  border-radius: 0;
+}
+
+.box-container form input {
+  border-radius: 0;
+  outline: none;
+}
+
+.box-container form .form-label {
+  width: 350px;
+}
+
+.box-container form button {
+  width: 100%;
+  border-radius: 0;
+}

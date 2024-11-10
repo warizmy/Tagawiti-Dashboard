@@ -1,0 +1,71 @@
+.reset-button {
+  cursor: pointer;
+  display: flex;
+  height: 40px;
+}
+
+.reset-button:hover {
+  filter: brightness(0.9);
+}
+
+.category-filters {
+  display: flex;
+  gap: 10px;
+  justify-content: center;
+  align-items: center;
+}
+
+.category-filters select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  width: 250px;
+}
+
+.category-filters button {
+  background: none;
+  border: none;
+  display: flex;
+}
+
+.crud-section {
+  background-color: #ffffff;
+  border: 1px solid #ddd;
+  border-radius: 5px;
+  padding: 20px;
+  margin-top: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.crud-section h2 {
+  font-size: 1.5em;
+  margin-bottom: 15px;
+  color: #34495e;
+}
+
+.entryCRUD {
+  padding: 5px 10px;
+  cursor: pointer;
+  border: none;
+  border-radius: 5px;
+  margin: 0 4px;
+  color: #fff;
+}
+
+#crudDelete {
+  background-color: #cc2b52;
+}
+
+#crudDelete:hover {
+  filter: brightness(1.1);
+  transition: 0.1s ease-in;
+}
+
+#crudUpdate {
+  background-color: #f3c623;
+}
+
+#crudUpdate:hover {
+  filter: brightness(1.1);
+  transition: 0.1s ease-in;
+}
