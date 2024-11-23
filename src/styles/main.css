@@ -2,12 +2,12 @@
 @import "responsive.css";
 @import "pop-up-box.css";
 @import "budget.css";
-@import "dashboard-home.css";
 @import "profile.css";
 @import "sidebar.css";
 @import "table.css";
 @import "login.css";
 @import "password-change.css";
+@import "news.css";
 
 * {
   margin: 0;

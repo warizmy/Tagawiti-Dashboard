@@ -19,7 +19,7 @@ class Logout {
     popupBox.className = 'popup-box';
     popupBox.innerHTML = `
      <div class="d-flex flex-column justify-content-center align-items-center p-3">
-         <p style="font-size: 20px">Apakah Anda yakin ingin logout?</p>
+         <p style="font-size: 20px">Apakah Anda yakin ingin keluar?</p>
          <div class="d-flex flex-row gap-2 justify-content-center">
            <button id="confirmLogout" class="btn btn-danger rounded-0">Ya</button>
            <button id="cancelLogout" class="btn btn-secondary rounded-0">Batal</button>

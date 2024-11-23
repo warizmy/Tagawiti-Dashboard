@@ -11,6 +11,11 @@
   font-size: 1.2em;
   text-align: center;
   padding: 10px;
+  cursor: default;
+}
+
+.sidebar-header img {
+  width: 40px;
 }
 
 .sidebar .menu {
@@ -41,6 +46,10 @@
 
 .nav-links i {
   font-size: 1.1rem;
+}
+
+#logoutAnchor:hover {
+  color: #ff0000;
 }
 
 .copyright-container {

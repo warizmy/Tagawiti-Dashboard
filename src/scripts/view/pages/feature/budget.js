@@ -1,7 +1,6 @@
 import LoadingCircle from '../../../utils/loading';
 import Popup from '../template-creators/pop-up-box';
 
-/* eslint-disable no-unused-vars */
 class Budget {
   constructor() {
     this._render();
@@ -16,8 +15,9 @@ class Budget {
 
     budgetContentContainer.innerHTML = `
       <header>
-        <h1>Data Anggaran Desa</h1>
+        <h1>Data Anggaran</h1>
         <div class="category-filters">
+          <button id="addMainCategory" class="btn-add-main">Tambah anggaran</button>
           <button>
             <img src="./images/reset.webp" alt="reset-img" id="resetButton" class="reset-button" style="display: none;">
           </button>
@@ -51,16 +51,19 @@ class Budget {
     } finally {
       loadingIndicator.hide();
     }
+
+    document.getElementById('addMainCategory').addEventListener('click', () => {
+      this._showAddMainCategoryForm();
+    });
   }
 
   async _fetchData() {
     const errorMessage = document.getElementById('errorMessage');
     try {
       const response = await fetch('http://localhost:5000/api/get/budget', {
-        credentials: 'include', // Pastikan cookie sesi dikirim untuk autentikasi
+        credentials: 'include',
       });
 
-      // Cek jika status respons adalah 401 (Unauthorized)
       if (response.status === 401) {
         window.location.href = '#/';
         window.location.reload();
@@ -174,7 +177,7 @@ class Budget {
   _showDataForSelectedCategory(level, id) {
     const crudSection = document.getElementById('crudSection');
     let selectedCategory;
-    let title = 'Data Anggaran - ';
+    let title = '';
 
     if (!id) {
       crudSection.innerHTML = '<p>Pilih Anggaran untuk menampilkan data anggaran.</p>';
@@ -219,36 +222,272 @@ class Budget {
 
     if (selectedCategory) {
       crudSection.innerHTML = `
-          <h2>${title}</h2>
-          <table>
-             <thead>
-                <tr>
-                   <th>Nilai Anggaran</th>
-                   <th>Realisasi</th>
-                   <th>Selisih</th>
-                   <th>Aksi</th>
-                </tr>
-             </thead>
-             <tbody>
-                <tr>
-                   <td>Rp ${selectedCategory.totalBudget.toLocaleString()}</td>
-                   <td>Rp ${selectedCategory.realized.toLocaleString()}</td>
-                   <td>Rp ${selectedCategory.surplusDeficit.toLocaleString()}</td>
-                   <td>
-                      <button class="entryCRUD" id="crudUpdate">Edit</button>
-                      <button class="entryCRUD" id="crudDelete">Hapus</button>
-                   </td>
-                </tr>
-             </tbody>
-          </table>
-       `;
+        <h2>${title}</h2>
+        <table>
+          <thead>
+            <tr>
+              <th>Nilai Anggaran</th>
+              <th>Realisasi</th>
+              <th>Selisih</th>
+              <th>Aksi</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Rp ${selectedCategory.totalBudget.toLocaleString()}</td>
+              <td>Rp ${selectedCategory.realized.toLocaleString()}</td>
+              <td>Rp ${selectedCategory.surplusDeficit.toLocaleString()}</td>
+              <td>
+                <button class="entryCRUD" id="crudUpdate">Edit</button>
+                <button class="entryCRUD" id="crudDelete">Hapus</button>
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        ${this._generateAddButton(level, selectedCategory.id)} <!-- Tambahkan tombol "Tambah" -->
+      `;
+
+      document.getElementById('crudDelete').addEventListener('click', async () => {
+        await this._deleteCategory(level, id);
+      });
 
       document.getElementById('crudUpdate').addEventListener('click', () => {
         this._showPopup(selectedCategory);
       });
+
+      const addButton = document.getElementById(level === 'utama' ? 'addSubCategory' : 'addSubSubCategory');
+      if (addButton) {
+        addButton.addEventListener('click', () => {
+          this._showAddCategoryForm(level === 'utama' ? 'sub_utama' : 'sub_kedua', selectedCategory.id);
+        });
+      }
     } else {
       crudSection.innerHTML = '<p>Pilih Anggaran untuk menampilkan data anggaran.</p>';
     }
+  }
+
+  // eslint-disable-next-line no-unused-vars
+  _generateAddButton(level, categoryId) {
+    if (level === 'utama') {
+      return '<button id="addSubCategory" class="btn-add mt-3">Tambah Sub Bidang</button>';
+    }
+    if (level === 'sub_utama') {
+      return '<button id="addSubSubCategory" class="btn-add mt-3">Tambah Kategori</button>';
+    }
+    return '';
+  }
+
+  _showAddMainCategoryForm() {
+    const crudSection = document.getElementById('crudSection');
+    crudSection.innerHTML = `
+      <h2>Tambah Anggaran</h2>
+      <form id="addMainCategoryForm" class="d-flex flex-column gap-3 px-3 py-2">
+        <div class="form-group d-flex flex-column gap-1">
+          <label for="categoryName">Nama</label>
+          <input type="text" id="categoryName" class="form-control" required placeholder="Masukkan nama anggaran">
+        </div>
+        <div class="form-group d-flex flex-column gap-1">
+          <label for="categoryBudget">Anggaran</label>
+          <input type="text" id="categoryBudget" class="form-control" required placeholder="Masukkan nilai anggaran">
+        </div>
+        <div class="form-group d-flex flex-column gap-1">
+          <label for="categoryBuying">Realisasi</label>
+          <input type="text" id="categoryBuying" class="form-control" required placeholder="Masukkan realisasi anggaran">
+        </div>
+        <div class="form-actions">
+          <button type="submit" class="btn-save-main-cat">Simpan</button>
+          <button type="button" id="backButton" class="btn-back">Kembali</button>
+        </div>
+      </form>
+    `;
+
+    const budgetInput = document.getElementById('categoryBudget');
+    const buyingInput = document.getElementById('categoryBuying');
+
+    // Tambahkan format Rupiah
+    this._formatToRupiah(budgetInput);
+    this._formatToRupiah(buyingInput);
+
+    document.getElementById('backButton').addEventListener('click', () => {
+      this._resetUI();
+    });
+
+    document.getElementById('addMainCategoryForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById('categoryName').value;
+      const budget = parseInt(budgetInput.dataset.rawValue || '0', 10); // Gunakan dataset untuk nilai asli
+      const buying = parseInt(buyingInput.dataset.rawValue || '0', 10);
+
+      await this._addCategory('utama', null, { name, budget, buying });
+    });
+  }
+
+  _showAddCategoryForm(level, parentId) {
+    const crudSection = document.getElementById('crudSection');
+    const title = level === 'sub_utama' ? 'Tambah Sub Bidang' : 'Tambah Kategori';
+
+    crudSection.innerHTML = `
+        <h2>${title}</h2>
+        <form id="addCategoryForm" class="d-flex flex-column gap-3 px-3 py-2">
+            <div class="form-group d-flex flex-column gap-1">
+                <label for="categoryName">Nama</label>
+                <input type="text" id="categoryName" class="form-control" required placeholder="Masukkan nama">
+            </div>
+            <div class="form-group d-flex flex-column gap-1">
+                <label for="categoryBudget">Anggaran</label>
+                <input type="text" id="categoryBudget" class="form-control" required placeholder="Masukkan anggaran">
+            </div>
+            <div class="form-group d-flex flex-column gap-1">
+                <label for="categoryBuying">Realisasi</label>
+                <input type="text" id="categoryBuying" class="form-control" required placeholder="Masukkan realisasi anggaran">
+            </div>
+            <div class="form-actions">
+                <button type="submit" class="btn-save-main-cat">Simpan</button>
+                <button type="button" id="backButton" class="btn-back">Kembali</button>
+            </div>
+        </form>
+    `;
+
+    const budgetInput = document.getElementById('categoryBudget');
+    const buyingInput = document.getElementById('categoryBuying');
+
+    // Tambahkan format Rupiah
+    this._formatToRupiah(budgetInput);
+    this._formatToRupiah(buyingInput);
+
+    document.getElementById('backButton').addEventListener('click', () => {
+      this._showDataForSelectedCategory(level === 'sub_utama' ? 'utama' : 'sub_utama', parentId);
+    });
+
+    document.getElementById('addCategoryForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const name = document.getElementById('categoryName').value;
+      const budget = parseInt(budgetInput.dataset.rawValue || '0', 10); // Gunakan dataset untuk nilai asli
+      const buying = parseInt(buyingInput.dataset.rawValue || '0', 10);
+
+      await this._addCategory(level, parentId, { name, budget, buying });
+    });
+  }
+
+  async _addCategory(level, parentId, data) {
+    try {
+      const response = await fetch(`http://localhost:5000/api/add/category/${level}`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ parentId, ...data }),
+        credentials: 'include',
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      const result = await response.json();
+
+      if (response.ok) {
+        this._showPopupMessage('Kategori berhasil ditambahkan!', 'success');
+        window.location.reload();
+        await this._fetchData();
+        this._showDataForSelectedCategory(level, parentId);
+      } else {
+        this._showPopupMessage('Gagal menambahkan kategori.', 'error');
+      }
+    } catch (error) {
+      console.error('Error adding category:', error);
+      this._showPopupMessage('Error adding category', 'error');
+    }
+  }
+
+  async _deleteCategory(level, id) {
+    try {
+      const userConfirmed = await this._showConfirmationPopup(
+        'Konfirmasi Hapus',
+        'Apakah Anda yakin ingin menghapus kategori ini?',
+      );
+
+      if (!userConfirmed) {
+        return;
+      }
+
+      const response = await fetch(`http://localhost:5000/api/delete/budget/${level}/${id}`, {
+        method: 'DELETE',
+        credentials: 'include',
+      });
+
+      // eslint-disable-next-line no-unused-vars
+      const result = await response.json();
+
+      if (response.ok) {
+        this._showPopupMessage('Kategori berhasil dihapus!', 'success');
+        window.location.reload();
+        await this._fetchData();
+        this._resetUI();
+      } else {
+        this._showPopupMessage('Gagal menghapus kategori.', 'error');
+      }
+    } catch (error) {
+      console.error('Error deleting category:', error);
+      this._showPopupMessage('Error deleting category', 'error');
+    }
+  }
+
+  _showConfirmationPopup(title, message) {
+    return new Promise((resolve) => {
+      const existingPopup = document.getElementById('confirmationPopup');
+      if (existingPopup) {
+        existingPopup.remove();
+      }
+
+      const popup = document.createElement('div');
+      popup.id = 'confirmationPopup';
+      popup.className = 'confirmation-popup';
+      popup.innerHTML = `
+        <div class="popup-content">
+          <h2>${title}</h2>
+          <p>${message}</p>
+          <div class="popup-actions">
+            <button id="confirmYes" class="btn-confirm">Ya</button>
+            <button id="confirmNo" class="btn-cancel">Tidak</button>
+          </div>
+        </div>
+      `;
+
+      document.body.appendChild(popup);
+
+      document.getElementById('confirmYes').addEventListener('click', () => {
+        popup.remove();
+        resolve(true);
+      });
+
+      document.getElementById('confirmNo').addEventListener('click', () => {
+        popup.remove();
+        resolve(false);
+      });
+    });
+  }
+
+  _showPopupMessage(message, type) {
+    const existingPopup = document.getElementById('popupMessage');
+    if (existingPopup) {
+      existingPopup.remove();
+    }
+
+    const popup = document.createElement('div');
+    popup.id = 'popupMessage';
+    popup.className = `popupMessage ${type}`;
+    popup.innerHTML = `
+      <div class="popup-content">
+        <p>${message}</p>
+        <button id="closePopup">Tutup</button>
+      </div>
+    `;
+
+    document.body.appendChild(popup);
+
+    document.getElementById('closePopup').addEventListener('click', () => {
+      popup.remove();
+    });
+
+    setTimeout(() => {
+      popup.remove();
+    }, 5000);
   }
 
   _showPopup(selectedCategory) {
@@ -274,14 +513,13 @@ class Budget {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData),
-            credentials: 'include', // Menyertakan cookie sesi untuk autentikasi
+            credentials: 'include',
           });
 
-          // Cek jika status respons adalah 401 (Unauthorized)
           if (response.status === 401) {
             window.location.hash = '#/';
-            window.location.reload(); // Redirect ke halaman login jika tidak terautentikasi
-            return; // Hentikan eksekusi fungsi setelah redirect
+            window.location.reload();
+            return;
           }
 
           if (!response.ok) throw new Error('Gagal memperbarui data');
@@ -296,7 +534,6 @@ class Budget {
       }
     }, () => this._resetUI());
 
-    // Set nilai input dengan format Rupiah
     const totalBudgetFormatted = selectedCategory.totalBudget ? `Rp ${selectedCategory.totalBudget.toLocaleString('id-ID')}` : '';
     const realizedBudgetFormatted = selectedCategory.realized ? `Rp ${selectedCategory.realized.toLocaleString('id-ID')}` : '';
 
@@ -317,6 +554,22 @@ class Budget {
 
     document.getElementById('resetButton').style.display = 'none';
     this.history = [];
+  }
+
+  _formatToRupiah(inputElement) {
+    inputElement.addEventListener('input', (event) => {
+      const value = event.target.value.replace(/[^0-9]/g, ''); // Hanya angka
+      if (value) {
+        event.target.value = `Rp. ${parseInt(value, 10).toLocaleString('id-ID')}`; // Format Rupiah
+      } else {
+        event.target.value = '';
+      }
+    });
+
+    inputElement.addEventListener('blur', (event) => {
+      const rawValue = event.target.value.replace(/[^0-9]/g, '');
+      event.target.dataset.rawValue = rawValue;
+    });
   }
 }
 

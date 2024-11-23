@@ -33,10 +33,6 @@ class LoginPage {
                     </div>
                     <p id="authFailed-txt" style="display: none; color:#ff0000"></p>
                 </div>
-                <div class="mb-3 form-check">
-                  <input type="checkbox" class="form-check-input" id="remembermeCheck">
-                  <label class="form-check-label" for="remembermeCheck">Ingat Saya</label>
-                </div>
               <button type="submit" class="btn btn-primary" id="btnSubmit">Masuk</button>
             </form>
         </div>

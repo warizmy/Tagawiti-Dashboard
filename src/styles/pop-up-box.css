@@ -20,14 +20,13 @@
   position: relative;
   background-color: #fff;
   padding: 20px;
-  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  /* box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2); */
 }
 
 .popup-actions button {
   padding: 5rem;
 }
 
-/* Gaya untuk tombol close di pojok kanan atas */
 .close-button {
   position: absolute;
   top: 0;
@@ -56,11 +55,13 @@
 }
 
 .pop-up-box-content form {
-  padding: 2rem 1rem 2rem 1rem;
+  padding: 1rem 1rem 2rem 1rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
   font-size: 1.1rem;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.2);
+  border-top: 5px solid #008000;
 }
 
 .pop-up-box-content form input {

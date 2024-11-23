@@ -1,3 +1,5 @@
+import LoadingCircle from '../../../utils/loading';
+
 class PasswordChangePage {
   constructor() {
     this._render();
@@ -85,7 +87,7 @@ class PasswordChangePage {
   }
 
   _handlePasswordChange() {
-    this.saveButton.addEventListener('click', (event) => {
+    this.saveButton.addEventListener('click', async (event) => {
       event.preventDefault();
 
       const newPassword = this.newPasswordInput.value;
@@ -103,29 +105,39 @@ class PasswordChangePage {
         return;
       }
 
-      fetch('http://localhost:5000/api/admin/change-password', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        credentials: 'include',
-        body: JSON.stringify({ newPassword, confirmPassword }),
-      })
-        .then(data => {
-          if (data.status === 200) {
-            this._showSuccessPopup();
-            fetch('http://localhost:5000/api/auth/logout', {
-              method: 'POST',
-              credentials: 'include',
-            });
-          } else {
-            this.failedTxt.textContent = data.message || 'Terjadi kesalahan saat mengganti kata sandi.';
-            this.failedTxt.style.display = 'block';
-          }
-        })
-        .catch(error => {
-          console.error('Error:', error);
-          this.failedTxt.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
-          this.failedTxt.style.display = 'block';
+      // Tampilkan loading indicator
+      const loadingIndicator = new LoadingCircle();
+      loadingIndicator.show();
+
+      try {
+        const response = await fetch('http://localhost:5000/api/admin/change-password', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          credentials: 'include',
+          body: JSON.stringify({ newPassword, confirmPassword }),
         });
+
+        const data = await response.json();
+
+        if (response.status === 200) {
+          this._showSuccessPopup();
+          // Logout user after password change
+          await fetch('http://localhost:5000/api/auth/logout', {
+            method: 'POST',
+            credentials: 'include',
+          });
+        } else {
+          this.failedTxt.textContent = data.message || 'Terjadi kesalahan saat mengganti kata sandi.';
+          this.failedTxt.style.display = 'block';
+        }
+      } catch (error) {
+        console.error('Error:', error);
+        this.failedTxt.textContent = 'Terjadi kesalahan. Silakan coba lagi.';
+        this.failedTxt.style.display = 'block';
+      } finally {
+        // Sembunyikan loading indicator setelah proses selesai
+        loadingIndicator.hide();
+      }
     });
   }
 
@@ -167,7 +179,7 @@ class PasswordChangePage {
     setTimeout(() => {
       window.location.hash = '#/';
       window.location.reload();
-    }, 3000);
+    }, 2000);
   }
 }
 

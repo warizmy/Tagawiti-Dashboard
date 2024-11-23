@@ -20,14 +20,14 @@ class Popup {
       <div class="popup-box">
         <button class="close-button" id="popupClose">&times;</button>
         <div class="pop-up-box-content">
-          <h2>Update Data Anggaran</h2>
-          <form>
+          <h2 class="pb-4">Update Data Anggaran</h2>
+          <form class="rounded-0 bg-body-secondary">
             <label for="totalBudget">Nominal Anggaran</label>
             <input type="text" id="totalBudget" placeholder="Rp 1.000.000" required />
             <label for="realizedBudget">Realisasi Anggaran</label>
             <input type="text" id="realizedBudget" placeholder="Rp 1.000.000" required />
           </form>
-          <div class="popup-actions">
+          <div class="pt-4 popup-actions">
             <button id="popupSubmit" class="popupSubmit">Simpan</button>
           </div> 
         </div>

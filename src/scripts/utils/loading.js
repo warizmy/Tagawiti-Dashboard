@@ -10,6 +10,10 @@ class LoadingCircle {
   hide() {
     this._loadingCircle.style.display = 'none';
   }
+
+  isActive() {
+    return this._loadingCircle.style.display === 'flex';
+  }
 }
 
 export default LoadingCircle;

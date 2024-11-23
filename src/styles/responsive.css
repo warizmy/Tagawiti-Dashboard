@@ -1,6 +1,7 @@
 @media (max-width: 1650px) {
-  .anggaran-content-container header h1 {
-    font-size: 1.8rem;
+
+  html{
+    font-size: 90%;
   }
 
   .category-filters .reset-button {
@@ -8,13 +9,10 @@
     display: flex;
     height: 30px;
   }
-  .anggaran-content-container .category-filters select {
-    padding: 10px;
-    border: 1px solid #ddd;
-    border-radius: 5px;
+  .budget-content-container .category-filters select {
     width: 200px;
   }
-  .anggaran-content-container .crud-section h2 {
+  .budget-content-container .crud-section h2 {
     font-size: 1.4rem;
   }
   .login-container .login-content-container h1 {

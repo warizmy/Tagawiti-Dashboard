@@ -2,6 +2,7 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 import 'bootstrap/dist/js/bootstrap.bundle.min';
 import 'bootstrap-icons/font/bootstrap-icons.css';
 import 'lazysizes';
+import 'quill/dist/quill.snow.css';
 import '../styles/main.css';
 import Main from './app';
 import LoadingCircle from './utils/loading';

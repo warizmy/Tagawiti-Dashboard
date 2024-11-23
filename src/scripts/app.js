@@ -7,6 +7,7 @@ import LoginPage from './view/pages/auth/login-page';
 import Logout from './view/pages/auth/logout';
 import DashboardMain from './view/pages/dashboard-home';
 import Budget from './view/pages/feature/budget';
+import NewsPage from './view/pages/feature/news';
 import PasswordChangePage from './view/pages/profile/password-change';
 
 class Main {
@@ -29,7 +30,7 @@ class Main {
     this._mainContentWrapper.insertBefore(profile, this._content);
 
     const sessionStatus = new SessionUtil()._render();
-    document.body.appendChild(sessionStatus); // Tambahkan elemen status sesi ke body
+    document.body.appendChild(sessionStatus);
 
     const logout = new Logout();
     logout._initializeEvent();
@@ -72,6 +73,10 @@ class Main {
     if (url === '/budget') {
       const BudgetPage = new Budget();
       BudgetPage.InitializeEvent();
+    }
+    if (url === '/news') {
+      const newsPage = new NewsPage();
+      newsPage.InitializeEvent();
     }
   }
 }
