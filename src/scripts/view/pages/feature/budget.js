@@ -60,7 +60,7 @@ class Budget {
   async _fetchData() {
     const errorMessage = document.getElementById('errorMessage');
     try {
-      const response = await fetch('http://localhost:5000/api/get/budget', {
+      const response = await fetch('https://api.desatagawiti.com/api/get/budget', {
         credentials: 'include',
       });
 
@@ -371,7 +371,7 @@ class Budget {
 
   async _addCategory(level, parentId, data) {
     try {
-      const response = await fetch(`http://localhost:5000/api/add/category/${level}`, {
+      const response = await fetch(`https://api.desatagawiti.com/api/add/category/${level}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ parentId, ...data }),
@@ -406,7 +406,7 @@ class Budget {
         return;
       }
 
-      const response = await fetch(`http://localhost:5000/api/delete/budget/${level}/${id}`, {
+      const response = await fetch(`https://api.desatagawiti.com/api/delete/budget/${level}/${id}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -509,7 +509,7 @@ class Budget {
         }
 
         if (Object.keys(updateData).length > 0) {
-          const response = await fetch(`http://localhost:5000/api/update/budget/${selectedCategory.level}/${selectedCategory.id}`, {
+          const response = await fetch(`https://api.desatagawiti.com/api/update/budget/${selectedCategory.level}/${selectedCategory.id}`, {
             method: 'PUT',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(updateData),

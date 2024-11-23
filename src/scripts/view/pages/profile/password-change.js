@@ -110,7 +110,7 @@ class PasswordChangePage {
       loadingIndicator.show();
 
       try {
-        const response = await fetch('http://localhost:5000/api/admin/change-password', {
+        const response = await fetch('https://api.desatagawiti.com/api/admin/change-password', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
           credentials: 'include',
@@ -122,7 +122,7 @@ class PasswordChangePage {
         if (response.status === 200) {
           this._showSuccessPopup();
           // Logout user after password change
-          await fetch('http://localhost:5000/api/auth/logout', {
+          await fetch('https://api.desatagawiti.com/api/auth/logout', {
             method: 'POST',
             credentials: 'include',
           });

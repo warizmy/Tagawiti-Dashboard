@@ -16,13 +16,13 @@ class SessionUtil {
 
   static async checkSession() {
     try {
-      const response = await fetch('http://localhost:5000/api/auth/check-session', {
+      const response = await fetch('https://api.desatagawiti.com/api/auth/check-session', {
         method: 'GET',
         credentials: 'include',
       });
 
       if (response.status === 401) {
-        await fetch('http://localhost:5000/api/auth/logout', {
+        await fetch('https://api.desatagawiti.com/api/auth/logout', {
           method: 'POST',
           credentials: 'include',
         });

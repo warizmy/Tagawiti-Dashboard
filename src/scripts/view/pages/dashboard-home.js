@@ -57,12 +57,12 @@ class DashboardMain {
     try {
       loadingIndicator.show();
 
-      const response = await fetch(`http://localhost:5000/api/get/budget/year/${year}`, {
+      const response = await fetch(`https://api.desatagawiti.com/api/get/budget/year/${year}`, {
         credentials: 'include',
       });
       const result = await response.json();
 
-      const yearResponse = await fetch('http://localhost:5000/api/get/years', {
+      const yearResponse = await fetch('https://api.desatagawiti.com/api/get/years', {
         credentials: 'include',
       });
       const yearData = await yearResponse.json();

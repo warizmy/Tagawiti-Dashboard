@@ -42,7 +42,7 @@ class Logout {
 
   _handleLogout() {
     // Proses logout ke backend
-    fetch('http://localhost:5000/api/auth/logout', {
+    fetch('https://api.desatagawiti.com/api/auth/logout', {
       method: 'POST',
       credentials: 'include',
     })

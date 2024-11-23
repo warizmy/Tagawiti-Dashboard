@@ -61,7 +61,7 @@ class LoginPage {
         return;
       }
 
-      fetch('http://localhost:5000/api/auth/login', {
+      fetch('https://api.desatagawiti.com/api/auth/login', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include', // Sertakan cookie di permintaan

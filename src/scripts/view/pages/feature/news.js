@@ -112,7 +112,7 @@ class NewsPage {
     const loadingIndicator = new LoadingCircle();
     try {
       loadingIndicator.show();
-      const response = await fetch('http://localhost:5000/api/get/news', {
+      const response = await fetch('https://api.desatagawiti.com/api/get/news', {
         method: 'GET',
         credentials: 'include',
       });
@@ -165,7 +165,7 @@ class NewsPage {
       loadingIndicator.show();
       const formData = new FormData();
       formData.append('image', imageFile);
-      const uploadResponse = await fetch('http://localhost:5000/api/upload/image', {
+      const uploadResponse = await fetch('https://api.desatagawiti.com/api/upload/image', {
         method: 'POST',
         credentials: 'include',
         body: formData,
@@ -176,7 +176,7 @@ class NewsPage {
         throw new Error(uploadResult.message);
       }
 
-      const newsResponse = await fetch('http://localhost:5000/api/add/news', {
+      const newsResponse = await fetch('https://api.desatagawiti.com/api/add/news', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -287,7 +287,7 @@ class NewsPage {
         const formData = new FormData();
         formData.append('image', editImageFile);
 
-        const uploadResponse = await fetch('http://localhost:5000/api/upload/image', {
+        const uploadResponse = await fetch('https://api.desatagawiti.com/api/upload/image', {
           method: 'POST',
           credentials: 'include',
           body: formData,
@@ -311,7 +311,7 @@ class NewsPage {
       };
 
       // Request update ke API
-      const response = await fetch(`http://localhost:5000/api/update/news/${newsId}`, {
+      const response = await fetch(`https://api.desatagawiti.com/api/update/news/${newsId}`, {
         method: 'PUT',
         headers: { 'Content-Type': 'application/json' },
         credentials: 'include',
@@ -337,7 +337,7 @@ class NewsPage {
     const loadingIndicator = new LoadingCircle();
     try {
       loadingIndicator.show();
-      const response = await fetch(`http://localhost:5000/api/delete/news/${newsId}`, {
+      const response = await fetch(`https://api.desatagawiti.com/api/delete/news/${newsId}`, {
         method: 'DELETE',
         credentials: 'include',
       });
@@ -359,7 +359,7 @@ class NewsPage {
     const loadingIndicator = new LoadingCircle();
     try {
       loadingIndicator.show();
-      const response = await fetch('http://localhost:5000/api/delete/all/news', {
+      const response = await fetch('https://api.desatagawiti.com/api/delete/all/news', {
         method: 'DELETE',
         credentials: 'include',
       });
