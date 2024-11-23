@@ -6,7 +6,7 @@
   "scripts": {
     "start-dev": "webpack-dev-server --config webpack.dev.js",
     "build": "webpack --config webpack.prod.js",
-    "serve": "http-server dist --port 5000",
+    "serve": "http-server dist --port 7000",
     "bundle-analyze": "webpack --config webpack.common.js"
   },
   "author": "",
