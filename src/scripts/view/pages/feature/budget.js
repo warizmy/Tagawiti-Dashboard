@@ -370,7 +370,9 @@ class Budget {
   }
 
   async _addCategory(level, parentId, data) {
+    const loadingIndicator = new LoadingCircle();
     try {
+      loadingIndicator.show();
       const response = await fetch(`https://api.desatagawiti.com/api/add/category/${level}`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
@@ -381,21 +383,27 @@ class Budget {
       // eslint-disable-next-line no-unused-vars
       const result = await response.json();
 
+      loadingIndicator.hide();
+
       if (response.ok) {
-        this._showPopupMessage('Kategori berhasil ditambahkan!', 'success');
-        window.location.reload();
+        this._showPopupMessage('Data Berhasil ditambahkan!', 'success');
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
         await this._fetchData();
         this._showDataForSelectedCategory(level, parentId);
       } else {
-        this._showPopupMessage('Gagal menambahkan kategori.', 'error');
+        this._showPopupMessage('Gagal Menambahkan Data!', 'error');
       }
     } catch (error) {
+      loadingIndicator.hide();
       console.error('Error adding category:', error);
       this._showPopupMessage('Error adding category', 'error');
     }
   }
 
   async _deleteCategory(level, id) {
+    const loadingIndicator = new LoadingCircle();
     try {
       const userConfirmed = await this._showConfirmationPopup(
         'Konfirmasi Hapus',
@@ -406,6 +414,8 @@ class Budget {
         return;
       }
 
+      loadingIndicator.show();
+
       const response = await fetch(`https://api.desatagawiti.com/api/delete/budget/${level}/${id}`, {
         method: 'DELETE',
         credentials: 'include',
@@ -414,17 +424,24 @@ class Budget {
       // eslint-disable-next-line no-unused-vars
       const result = await response.json();
 
+      loadingIndicator.hide();
+
       if (response.ok) {
         this._showPopupMessage('Kategori berhasil dihapus!', 'success');
-        window.location.reload();
+        setTimeout(() => {
+          window.location.reload();
+        }, 2000);
         await this._fetchData();
-        this._resetUI();
       } else {
         this._showPopupMessage('Gagal menghapus kategori.', 'error');
       }
     } catch (error) {
+      loadingIndicator.hide();
       console.error('Error deleting category:', error);
       this._showPopupMessage('Error deleting category', 'error');
+      setTimeout(() => {
+        window.location.reload();
+      }, 2000);
     }
   }
 
@@ -465,9 +482,17 @@ class Budget {
 
   _showPopupMessage(message, type) {
     const existingPopup = document.getElementById('popupMessage');
+    const existingOverlay = document.getElementById('popupOverlay');
     if (existingPopup) {
       existingPopup.remove();
     }
+    if (existingOverlay) {
+      existingOverlay.remove();
+    }
+
+    const overlay = document.createElement('div');
+    overlay.id = 'popupOverlay';
+    overlay.className = 'popupOverlay';
 
     const popup = document.createElement('div');
     popup.id = 'popupMessage';
@@ -475,19 +500,11 @@ class Budget {
     popup.innerHTML = `
       <div class="popup-content">
         <p>${message}</p>
-        <button id="closePopup">Tutup</button>
       </div>
     `;
 
+    document.body.appendChild(overlay);
     document.body.appendChild(popup);
-
-    document.getElementById('closePopup').addEventListener('click', () => {
-      popup.remove();
-    });
-
-    setTimeout(() => {
-      popup.remove();
-    }, 5000);
   }
 
   _showPopup(selectedCategory) {
@@ -524,6 +541,7 @@ class Budget {
 
           if (!response.ok) throw new Error('Gagal memperbarui data');
 
+          window.location.reload();
           await this._fetchData();
           this._showDataForSelectedCategory(selectedCategory.level, selectedCategory.id);
         }

@@ -70,6 +70,7 @@ class DashboardMain {
       const years = yearData.data.map((item) => item.tahun);
 
       if (Array.isArray(years)) {
+        years.sort((a, b) => a - b);
         this.populateYearFilter(years);
       }
 
